@@ -7,3 +7,8 @@ In this app, I implimented assocation mapping one to many (product belong to cat
 Category{id,name}
 
 Product{id,name,categoryId} foreign key refences given
+
+hash 
+path to run app 
+
+http://localhost:8080/#/   
