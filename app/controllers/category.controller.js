@@ -20,7 +20,7 @@ const getPagingData = (data, page, limit) => {
 
 const getPagingProductData = (data, page, limit) => {
  
-  const products = data.rows.map(product => {
+  const productLists = data.rows.map(product => {
     //tidy up the product data
     return Object.assign(
       {},
@@ -36,7 +36,7 @@ const getPagingProductData = (data, page, limit) => {
   const currentPage = page ? +page : 0;
   const totalPages = Math.ceil(totalItems / limit);
 
-  return { totalItems, products, totalPages, currentPage };
+  return { totalItems, productLists, totalPages, currentPage };
  
 };
 
@@ -172,10 +172,10 @@ exports.deleteAll = (req, res) => {
 
 // Retrieve all product from the database with category name
 exports.findAllWithCategoryName = (req, res) => {
-  const { page, size } = req.query;
-
+  const { page, size, name } = req.query;
+  var condition = name ? { name: { [Op.like]: `%${name}%` } } : null;
   const { limit, offset } = getPagination(page, size);
-  Product.findAndCountAll({ include: ["category"] ,  limit,  offset })
+  Product.findAndCountAll({ include: ["category"],where: condition ,  limit,  offset })
     .then(data => {
       const response = getPagingProductData(data, page, limit);
       res.send(response);
