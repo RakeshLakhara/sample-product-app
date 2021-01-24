@@ -2,7 +2,11 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 
+const path = __dirname + '/app/views/';
+
 const app = express();
+
+app.use(express.static(path));
 
 var corsOptions = {
   origin: "http://localhost:8081"
@@ -19,13 +23,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const db = require("./app/models");
 db.sequelize.sync();
 
-// db.sequelize.sync({ force: true }).then(() => {
-//     console.log("Drop and re-sync db.");
-//   });
-
 // simple route
 app.get("/", (req, res) => {
-  res.json({ message: "Welcome to sample application." });
+  res.sendFile(path + "index.html");
 });
 
 require("./app/routes/category.routes")(app);
